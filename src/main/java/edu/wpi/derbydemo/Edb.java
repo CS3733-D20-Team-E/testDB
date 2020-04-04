@@ -1,11 +1,9 @@
 package edu.wpi.derbydemo;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
-import java.util.Arrays;
 import java.util.Scanner;
 
 import static java.lang.System.exit;
@@ -27,7 +25,7 @@ public class Edb {
                 inputUsername = arg;
             if (i == 2)
                 inputPassword = arg;
-            if(i == 3)
+            if (i == 3)
                 inputCommand = arg;
         }
         if (args.length == 2) {
@@ -51,7 +49,7 @@ public class Edb {
             e.printStackTrace();
             return;
         }
-        
+
         System.out.println("Apache Derby driver registered!");
         Connection connection = null;
 
@@ -92,11 +90,10 @@ public class Edb {
     private static void parseInput(Connection connection, int option) throws SQLException, IOException {
         Statement stmt = connection.createStatement();
         Statement stmt2 = connection.createStatement();
-        if(option == 1) {//Report Museum Information
+        if (option == 1) {//Report Museum Information
             ResultSet rs = stmt.executeQuery("SELECT * FROM Museums");
             printMuseumInfo(rs);
-        }
-        else if(option == 2) {//Report Painting Information
+        } else if (option == 2) {//Report Painting Information
             ResultSet rs2 = stmt.executeQuery("SELECT * FROM Museums");
             System.out.println("Name\t\t|\t\tAddress\t\t|\t\tPhone\t\t|\t\tVisitors/Year");
             while (rs2.next()) {
@@ -104,20 +101,19 @@ public class Edb {
                 String s2 = rs2.getString("Address");
                 String s3 = rs2.getString("Phone");
                 int s4 = rs2.getInt("Visitors");
-                System.out.println(s1+"\t|\t"+s2+"\t|\t"+s3+"\t|\t"+s4);
+                System.out.println(s1 + "\t|\t" + s2 + "\t|\t" + s3 + "\t|\t" + s4);
                 System.out.println("Museum\t\t|\t\tName\t\t|\t\tType\t\t|\t\tArtist");
 
                 ResultSet rs1 = stmt2.executeQuery(String.format("SELECT * FROM PAINTINGS WHERE MUSEUM = '%s'", s1));
-                while(rs1.next()) {
+                while (rs1.next()) {
                     String s5 = rs1.getString("Museum");
                     String s6 = rs1.getString("Name");
                     String s7 = rs1.getString("Type");
                     String s8 = rs1.getString("Artist");
-                    System.out.println(s5+"\t|\t"+s6+"\t|\t"+s7+"\t|\t"+s8);
+                    System.out.println(s5 + "\t|\t" + s6 + "\t|\t" + s7 + "\t|\t" + s8);
                 }
             }
-        }
-        else if(option == 3) {
+        } else if (option == 3) {
             Scanner in = new Scanner(System.in);
 
             System.out.println("Enter museum name you want to update (ex: Worcester Art Museum):");
@@ -130,8 +126,7 @@ public class Edb {
             System.out.println("Successfully changed phone number.");
             ResultSet rs = stmt2.executeQuery("SELECT * FROM Museums");
             printMuseumInfo(rs);
-        }
-        else {
+        } else {
             System.out.println("Exiting.");
             exit(0);
         }
@@ -145,7 +140,7 @@ public class Edb {
             String s2 = rs.getString("Address");
             String s3 = rs.getString("Phone");
             int s4 = rs.getInt("Visitors");
-            System.out.println(s1+"\t|\t"+s2+"\t|\t"+s3+"\t|\t"+s4);
+            System.out.println(s1 + "\t|\t" + s2 + "\t|\t" + s3 + "\t|\t" + s4);
         }
     }
 
@@ -153,14 +148,13 @@ public class Edb {
     private static void setupDB(Connection connection, String filename) throws SQLException, IOException {
         Statement stmt = connection.createStatement();
         String s1 = null, s2 = null, s3 = null, s4 = null, dbName = null;
-        if(filename.equals("museum.csv")) {
+        if (filename.equals("museum.csv")) {
             s1 = "Name";
             s2 = "Address";
             s3 = "Phone";
             s4 = "Visitors";
             dbName = "Museums";
-        }
-        else {
+        } else {
             s1 = "Museum";
             s2 = "Name";
             s3 = "Type";
@@ -168,12 +162,12 @@ public class Edb {
             dbName = "Paintings";
         }
         String sql = String.format("INSERT INTO %s(%s, %s, %s, %s) VALUES (?, ?, ?, ?)", dbName, s1, s2, s3, s4);
-       //System.out.println("SQL = " + sql);
+        //System.out.println("SQL = " + sql);
         PreparedStatement statement = connection.prepareStatement(sql);
 
         //Get absolute file path
         String path = String.valueOf(Edb.class.getClassLoader().getResource(filename).getFile());
-        path = path.substring(1, path.length());
+        path = path.substring(1);
 
         System.out.println(path);
         BufferedReader lineReader = new BufferedReader(new FileReader(path));
@@ -193,14 +187,13 @@ public class Edb {
             String visitors = data[3];
 
             //Check if for museum or painting table
-            if(filename.equals("museum.csv")) {
+            if (filename.equals("museum.csv")) {
                 statement.setString(1, name);
                 statement.setString(2, address);
                 statement.setString(3, phone);
                 int visitorsCount = Integer.parseInt(visitors);
                 statement.setInt(4, visitorsCount);
-            }
-            else {
+            } else {
                 statement.setString(1, name);
                 statement.setString(2, address);
                 statement.setString(3, phone);
@@ -219,8 +212,9 @@ public class Edb {
         // execute the remaining queries
         statement.executeBatch();
     }
+
     //Turns on built in users and creates the necessary admin user.
-    private static void turnOnBuiltInUsers(Connection connection, String username, String pass) throws SQLException{
+    private static void turnOnBuiltInUsers(Connection connection, String username, String pass) throws SQLException {
         System.out.println("Turning on authentication.");
         Statement s = connection.createStatement();
         // Setting and Confirming requireAuthentication
@@ -242,7 +236,7 @@ public class Edb {
         // (user authorization)
         s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.database.defaultConnectionMode', 'noAccess')");
         // Confirming default connection mode
-        rs = s.executeQuery ("VALUES SYSCS_UTIL.SYSCS_GET_DATABASE_PROPERTY('derby.database.defaultConnectionMode')");
+        rs = s.executeQuery("VALUES SYSCS_UTIL.SYSCS_GET_DATABASE_PROPERTY('derby.database.defaultConnectionMode')");
         rs.next();
         System.out.println("Value of defaultConnectionMode is " + rs.getString(1));
 

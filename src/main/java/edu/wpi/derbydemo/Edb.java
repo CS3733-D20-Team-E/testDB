@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
+import java.util.Arrays;
 
 import static java.lang.System.exit;
 
@@ -53,23 +54,16 @@ public class Edb {
 
         try {
             // substitute your database name for myDB
-            connection = DriverManager.getConnection("jdbc:derby:Edb;create=true;user=" + inputUsername + ";password=" + inputPassword);
+            connection = DriverManager.getConnection("jdbc:derby:memory:Edb;create=true;user=" + inputUsername + ";password=" + inputPassword);
             turnOnBuiltInUsers(connection, inputUsername, inputPassword);
             Statement stmt = connection.createStatement();
-          /*  CREATE TABLE `Museums` (
-	`Name` VARCHAR(50) NOT NULL,
-	`Address` VARCHAR(255) CHARACTER SET ascii COLLATE ascii_bin,
-	`Country` VARCHAR CHARACTER SET ascii COLLATE ascii_bin,
-	`Visitors` INT unsigned zerofill,
-    PRIMARY KEY (`Name`)
-);*/
-            String query = "CREATE TABLE Museums( " + "Name VARCHAR(50) NOT NULL," +
-                    "Address VARCHAR(255), " + "Country VARCHAR(50), " +
-                    "Visitors INT unsigned zerofill, " + "PRIMARY KEY (Name))";
+
+            //Create tables if they do not already exist
+
+
+            String query = "CREATE TABLE Museums( Name VARCHAR(50) NOT NULL,Address VARCHAR(255), Country VARCHAR(50), Visitors INT, PRIMARY KEY (Name))";
             stmt.execute(query);
-            String query2 = "CREATE TABLE Museums( " + "Museum VARCHAR(50) NOT NULL," +
-                    "Name VARCHAR(255), " + "Type VARCHAR(50) NOT NULL, " +
-                    "Artist VARCHAR(50), " + "PRIMARY KEY (Name))";
+            String query2 = "CREATE TABLE Paintings( Museum VARCHAR(50) NOT NULL, Name VARCHAR(255) NOT NULL, Type VARCHAR(50), Artist VARCHAR(50), PRIMARY KEY (Name))";
             stmt.execute(query2);
         } catch (SQLException e) {
             System.out.println("Connection failed. Check output console.");
@@ -79,6 +73,8 @@ public class Edb {
         System.out.println("Apache Derby connection established!");
         setupDB(connection, "museum.csv");
         setupDB(connection, "paintings.csv");
+        connection.commit();
+        connection.close();
     }
 
     //TODO: Read from 2 csv files and populate DB.
@@ -95,13 +91,20 @@ public class Edb {
         else {
             s1 = "Museum";
             s2 = "Name";
-            s2 = "Type";
-            s2 = "Artist";
+            s3 = "Type";
+            s4 = "Artist";
+            dbName = "Paintings";
         }
         String sql = String.format("INSERT INTO %s(%s, %s, %s, %s) VALUES (?, ?, ?, ?)", dbName, s1, s2, s3, s4);
-        System.out.println("SQL = " + sql);
+       //System.out.println("SQL = " + sql);
         PreparedStatement statement = connection.prepareStatement(sql);
-        BufferedReader lineReader = new BufferedReader(new FileReader(filename));
+
+        //Get absolute file path
+        String path = String.valueOf(Edb.class.getClassLoader().getResource(filename).getFile());
+        path = path.substring(1, path.length());
+
+        System.out.println(path);
+        BufferedReader lineReader = new BufferedReader(new FileReader(path));
         String lineText = null;
 
         int count = 0;
@@ -109,23 +112,36 @@ public class Edb {
 
         lineReader.readLine(); // skip header line
         while ((lineText = lineReader.readLine()) != null) {
-            String[] data = lineText.split(",");
+            System.out.println(lineText);
+            String[] data = lineText.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+
             String name = data[0];
             String address = data[1];
             String country = data[2];
             String visitors = data[3];
-            String comment = data.length == 5 ? data[4] : "";
-
-            statement.setString(1, name);
-            statement.setString(2, address);
-
-
-            Float fRating = Float.parseFloat(visitors);
-            statement.setFloat(4, fRating);
-
+            System.out.println("----------------------------");
+            System.out.println(data[0]);
+            System.out.println(data[1]);
+            System.out.println(data[2]);
+            System.out.println(data[3]);
+            System.out.println("----------------------------");
+            //Check if for museum or painting table
+            if(filename.equals("museum.csv")) {
+                statement.setString(1, name);
+                statement.setString(2, address);
+                statement.setString(3, country);
+                int visitorsCount = Integer.parseInt(visitors);
+                statement.setInt(4, visitorsCount);
+            }
+            else {
+                statement.setString(1, name);
+                statement.setString(2, address);
+                statement.setString(3, country);
+                statement.setString(4, visitors);
+            }
 
             statement.addBatch();
-
+            count++;
             if (count % batchSize == 0) {
                 statement.executeBatch();
             }
@@ -135,9 +151,6 @@ public class Edb {
 
         // execute the remaining queries
         statement.executeBatch();
-
-        connection.commit();
-        connection.close();
     }
     private static void turnOnBuiltInUsers(Connection connection, String username, String pass) throws SQLException{
         System.out.println("Turning on authentication.");

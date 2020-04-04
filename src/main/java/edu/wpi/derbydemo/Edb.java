@@ -89,9 +89,9 @@ public class Edb {
             System.out.println("4 - Exit Program");*/
     private static void parseInput(Connection connection, int option) throws SQLException {
         Statement stmt = connection.createStatement();
+        Statement stmt2 = connection.createStatement();
         if(option == 1) {//Report Museum Information
             ResultSet rs = stmt.executeQuery("SELECT * FROM Museums");
-            ResultSetMetaData rsmd = rs.getMetaData();
             System.out.println("Name\t\t|\t\tAddress\t\t|\t\tPhone\t\t|\t\tVisitors/Year");
             while (rs.next()) {
                 String s1 = rs.getString("Name");
@@ -102,7 +102,25 @@ public class Edb {
             }
         }
         else if(option == 2) {//Report Painting Information
+            ResultSet rs2 = stmt.executeQuery("SELECT * FROM Museums");
+            System.out.println("Name\t\t|\t\tAddress\t\t|\t\tPhone\t\t|\t\tVisitors/Year");
+            while (rs2.next()) {
+                String s1 = rs2.getString("Name");
+                String s2 = rs2.getString("Address");
+                String s3 = rs2.getString("Phone");
+                int s4 = rs2.getInt("Visitors");
+                System.out.println(s1+"\t|\t"+s2+"\t|\t"+s3+"\t|\t"+s4);
+                System.out.println("Museum\t\t|\t\tName\t\t|\t\tType\t\t|\t\tArtist");
 
+                ResultSet rs1 = stmt2.executeQuery(String.format("SELECT * FROM PAINTINGS WHERE MUSEUM = '%s'", s1));
+                while(rs1.next()) {
+                    String s5 = rs1.getString("Museum");
+                    String s6 = rs1.getString("Name");
+                    String s7 = rs1.getString("Type");
+                    String s8 = rs1.getString("Artist");
+                    System.out.println(s5+"\t|\t"+s6+"\t|\t"+s7+"\t|\t"+s8);
+                }
+            }
         }
         else if(option == 3) {
 

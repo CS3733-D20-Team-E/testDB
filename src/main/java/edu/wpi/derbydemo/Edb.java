@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
 import java.util.Arrays;
+import java.util.Scanner;
 
 import static java.lang.System.exit;
 
@@ -79,6 +80,7 @@ public class Edb {
         System.out.println(inputCommand);
         int option = Integer.parseInt(inputCommand);
         parseInput(connection, option);
+        connection.commit();
         connection.close();
     }
 
@@ -87,19 +89,12 @@ public class Edb {
             System.out.println("2 - Report Paintings in Museum");
             System.out.println("3 - Update Museum Phone Number");
             System.out.println("4 - Exit Program");*/
-    private static void parseInput(Connection connection, int option) throws SQLException {
+    private static void parseInput(Connection connection, int option) throws SQLException, IOException {
         Statement stmt = connection.createStatement();
         Statement stmt2 = connection.createStatement();
         if(option == 1) {//Report Museum Information
             ResultSet rs = stmt.executeQuery("SELECT * FROM Museums");
-            System.out.println("Name\t\t|\t\tAddress\t\t|\t\tPhone\t\t|\t\tVisitors/Year");
-            while (rs.next()) {
-                String s1 = rs.getString("Name");
-                String s2 = rs.getString("Address");
-                String s3 = rs.getString("Phone");
-                int s4 = rs.getInt("Visitors");
-                System.out.println(s1+"\t|\t"+s2+"\t|\t"+s3+"\t|\t"+s4);
-            }
+            printMuseumInfo(rs);
         }
         else if(option == 2) {//Report Painting Information
             ResultSet rs2 = stmt.executeQuery("SELECT * FROM Museums");
@@ -123,11 +118,34 @@ public class Edb {
             }
         }
         else if(option == 3) {
+            Scanner in = new Scanner(System.in);
 
+            System.out.println("Enter museum name you want to update (ex: Worcester Art Museum):");
+            String inputMuseum = in.nextLine();
+            System.out.println("New Phone Number:");
+            String inputNumber = in.nextLine();
+            in.close();
+            System.out.println(inputMuseum);
+            stmt.executeUpdate(String.format("UPDATE Museums SET Phone = '%s' WHERE Name = '%s'", inputNumber, inputMuseum));
+            System.out.println("Successfully changed phone number.");
+            ResultSet rs = stmt2.executeQuery("SELECT * FROM Museums");
+            printMuseumInfo(rs);
         }
         else {
             System.out.println("Exiting.");
             exit(0);
+        }
+    }
+
+    //Duplicated code from parseInput that prints the museums table
+    private static void printMuseumInfo(ResultSet rs) throws SQLException {
+        System.out.println("Name\t\t|\t\tAddress\t\t|\t\tPhone\t\t|\t\tVisitors/Year");
+        while (rs.next()) {
+            String s1 = rs.getString("Name");
+            String s2 = rs.getString("Address");
+            String s3 = rs.getString("Phone");
+            int s4 = rs.getInt("Visitors");
+            System.out.println(s1+"\t|\t"+s2+"\t|\t"+s3+"\t|\t"+s4);
         }
     }
 

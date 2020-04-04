@@ -1,6 +1,6 @@
-Name,Address,Country,Visitors
-The Louvre,"Musee du Louvre, 75001 Paris, France",France,9600000
-Worcester Art Museum,"55 Salisbury St, Worcester, MA 01609",USA,40000
-National Gallery of Art,"6th St & Constitution Ave NW, Washington, DC 20001",USA,90000
-Victoria and Albert Museum,"Cromwell Road, London, SW7 2RL",UK,7500
-Mars Museum of Modern Art,"314 Opportunity Road, Martianville, Mars",MARS,4
+Name,Address,Phone,Visitors
+The Louvre,"Musee du Louvre, 75001 Paris, France",33 (0)1 40 20 53 17,9600000
+Worcester Art Museum,"55 Salisbury St, Worcester, MA 01609",(508) 799-4406,40000
+National Gallery of Art,"6th St & Constitution Ave NW, Washington, DC 20001",(508) 799-4406,90000
+Victoria and Albert Museum,"Cromwell Road, London, SW7 2RL",44 (0)20 7942 2000,7500
+Mars Museum of Modern Art,"314 Opportunity Road, Martianville, Mars",(666)-666-6969,4

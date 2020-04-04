@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="Apache Derby (Embedded) - Edb" uuid="84de5018-c099-43e1-8518-0a2305c9eda4">
+    <data-source source="LOCAL" name="Edb" uuid="f41132a2-acff-4435-beac-968b3c84b977">
       <driver-ref>derby.embedded</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.apache.derby.jdbc.EmbeddedDriver</jdbc-driver>
+      <jdbc-url>jdbc:derby:$PROJECT_DIR$/Edb</jdbc-url>
     </data-source>
   </component>
 </project>

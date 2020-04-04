@@ -5,7 +5,7 @@ import java.sql.*;
 import static java.lang.System.exit;
 
 public class Edb {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         String arg, inputUsername = "", inputPassword = "";
         int i = 0;
 
@@ -57,6 +57,12 @@ public class Edb {
             return;
         }
         System.out.println("Apache Derby connection established!");
+        setupDB(connection);
+    }
+
+    //TODO: Read from 2 csv files and populate DB.
+    private static void setupDB(Connection connection) throws SQLException {
+        Statement stmt = connection.createStatement();
     }
 
     private static void turnOnBuiltInUsers(Connection connection, String username, String pass) throws SQLException{

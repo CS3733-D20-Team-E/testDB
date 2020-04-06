@@ -7,7 +7,7 @@ plugins {
 }
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
-mainClassName = 'edu.wpi.derbydemo.DerbyDemo'
+mainClassName = 'edu.wpi.derbydemo.Edb'
 
 //TestFX doesn't play nice with macOS
 String osName = System.getProperty("os.name").toLowerCase();
@@ -73,8 +73,7 @@ jacocoTestCoverageVerification {
                 minimum = 1.0
             }
             excludes = [
-              'edu.wpi.derbydemo.App',
-              'edu.wpi.derbydemo.Main'
+              'edu.wpi.derbydemo.Edb'
             ]
         }
 
@@ -86,8 +85,7 @@ jacocoTestCoverageVerification {
                 minimum = 0.25
             }
             excludes = [
-                    'edu.wpi.derbydemo.App',
-                    'edu.wpi.derbydemo.Main'
+                    'edu.wpi.derbydemo.Edb'
             ]
         }
 
@@ -99,8 +97,7 @@ jacocoTestCoverageVerification {
                 minimum = 0.25
             }
             excludes = [
-                    'edu.wpi.derbydemo.App',
-                    'edu.wpi.derbydemo.Main'
+                    'edu.wpi.derbydemo.Edb'
             ]
         }
     }

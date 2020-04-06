@@ -20,7 +20,7 @@ public class Edb {
         //Parse username and password
         while (i < args.length) {
             arg = args[i++]; //Get next arg.
-            System.out.println("i = " + i + " arg = " + arg);
+            //System.out.println("i = " + i + " arg = " + arg);
             if (i == 1)
                 inputUsername = arg;
             if (i == 2)
@@ -55,14 +55,14 @@ public class Edb {
 
         try {
             // substitute your database name for myDB
-            connection = DriverManager.getConnection("jdbc:derby:memory:Edb;create=true;user=" + inputUsername + ";password=" + inputPassword);
+            connection = DriverManager.getConnection(String.format("jdbc:derby:memory:Edb;create=true;user=%s;password=%s", inputUsername, inputPassword));
             turnOnBuiltInUsers(connection, inputUsername, inputPassword);
             Statement stmt = connection.createStatement();
 
             //Create tables if they do not already exist
 
 
-            String query = "CREATE TABLE Museums( Name VARCHAR(50) NOT NULL,Address VARCHAR(255), Phone VARCHAR(50), Visitors INT, PRIMARY KEY (Name))";
+            String query = "CREATE TABLE Museums( Name VARCHAR(50) NOT NULL, Address VARCHAR(255), Phone VARCHAR(50), Visitors INT, PRIMARY KEY (Name))";
             stmt.execute(query);
             String query2 = "CREATE TABLE Paintings( Museum VARCHAR(50) NOT NULL, Name VARCHAR(255) NOT NULL, Type VARCHAR(50), Artist VARCHAR(50), PRIMARY KEY (Name))";
             stmt.execute(query2);

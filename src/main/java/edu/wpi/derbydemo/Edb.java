@@ -3,6 +3,7 @@ package edu.wpi.derbydemo;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.*;
 import java.util.Scanner;
 
@@ -166,11 +167,10 @@ public class Edb {
         PreparedStatement statement = connection.prepareStatement(sql);
 
         //Get absolute file path
-        String path = String.valueOf(Edb.class.getClassLoader().getResource(filename).getFile());
-        path = path.substring(1);
+        String path = "/" + filename;
 
         System.out.println(path);
-        BufferedReader lineReader = new BufferedReader(new FileReader(path));
+        BufferedReader lineReader = new BufferedReader(new InputStreamReader(Edb.class.getResourceAsStream(path)));
         String lineText = null;
 
         int count = 0;

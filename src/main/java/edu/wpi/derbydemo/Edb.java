@@ -61,8 +61,6 @@ public class Edb {
             Statement stmt = connection.createStatement();
 
             //Create tables if they do not already exist
-
-
             String query = "CREATE TABLE Museums( Name VARCHAR(50) NOT NULL, Address VARCHAR(255), Phone VARCHAR(50), Visitors INT, PRIMARY KEY (Name))";
             stmt.execute(query);
             String query2 = "CREATE TABLE Paintings( Museum VARCHAR(50) NOT NULL, Name VARCHAR(255) NOT NULL, Type VARCHAR(50), Artist VARCHAR(50), PRIMARY KEY (Name))";
@@ -116,7 +114,6 @@ public class Edb {
             }
         } else if (option == 3) {
             Scanner in = new Scanner(System.in);
-
             System.out.println("Enter museum name you want to update (ex: Worcester Art Museum):");
             String inputMuseum = in.nextLine();
             System.out.println("New Phone Number:");
@@ -169,7 +166,7 @@ public class Edb {
         //Get absolute file path
         String path = "/" + filename;
 
-        System.out.println(path);
+        //System.out.println(path);
         BufferedReader lineReader = new BufferedReader(new InputStreamReader(Edb.class.getResourceAsStream(path)));
         String lineText = null;
 
@@ -230,6 +227,7 @@ public class Edb {
         String un = "'" + username + "'";
         String pw = "'" + pass + "'";
         s.executeUpdate(String.format("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.user.%s',%s)", username, pw));
+        s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY(" + "'derby.user.readonly', 'password')");
         System.out.println("Successfully created user");
 
         // Setting default connection mode to no access

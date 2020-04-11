@@ -1,11 +1,11 @@
 ----------------------------------------------------------------
-Wed Apr 08 20:19:23 EDT 2020:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0171-5c4e-3a86-000007504e40 
-on database directory memory:C:\Users\Matthew\IdeaProjects\testDB\Edb with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@8bcc55f 
-Loaded from file:/C:/Users/Matthew/.gradle/caches/modules-2/files-2.1/org.apache.derby/derby/10.14.2.0/7efad40ef52fbb1f08142f07a83b42d29e47d8ce/derby-10.14.2.0.jar
-java.vendor=JetBrains s.r.o
-java.runtime.version=11.0.6+8-b520.43
-user.dir=C:\Users\Matthew\IdeaProjects\testDB
+Fri Apr 10 17:29:21 EDT 2020:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0171-65ff-4767-00000f77ceb8 
+on database directory memory:C:\Users\entei\IdeaProjects\testDB\Edb with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@30946e09 
+Loaded from file:/C:/Users/entei/.gradle/caches/modules-2/files-2.1/org.apache.derby/derby/10.14.2.0/7efad40ef52fbb1f08142f07a83b42d29e47d8ce/derby-10.14.2.0.jar
+java.vendor=Amazon.com Inc.
+java.runtime.version=11.0.6+10-LTS
+user.dir=C:\Users\entei\IdeaProjects\testDB
 os.name=Windows 10
 os.arch=amd64
 os.version=10.0
